@@ -1,14 +1,19 @@
 <template>
-  <PageHeader />
+  <PageHeader/>
+  <Tab/>
   <router-view/>
 </template>
-
-<style lang="scss" scoped>
-
-</style>
 <script>
-import PageHeader from '@/components/PageHeader/PageHeader'
+import PageHeader from '@/components/PageHeader'
+import Tab from '@/components/Tab'
+
 export default {
-  components: { PageHeader }
+  components: { Tab, PageHeader }
 }
 </script>
+
+<style
+  lang="scss"
+  scoped>
+
+</style>
