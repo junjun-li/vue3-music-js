@@ -1,12 +1,31 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
-import Home from '../views/Home.vue'
+
+const Recommend = () => import(/* webpackChunkName: "recommend" */ '@/views/Recommend')
+const Search = () => import(/* webpackChunkName: "search" */ '@/views/Search')
+const Singer = () => import(/* webpackChunkName: "singer" */ '@/views/Singer')
+const TopList = () => import(/* webpackChunkName: "top-list" */ '@/views/TopList')
 
 const routes = [
-  // {
-  //   path: '/',
-  //   name: 'Home',
-  //   component: Home
-  // },
+  {
+    path: '/',
+    redirect: '/recommend'
+  },
+  {
+    path: '/recommend',
+    component: Recommend
+  },
+  {
+    path: '/search',
+    component: Search
+  },
+  {
+    path: '/singer',
+    component: Singer
+  },
+  {
+    path: '/top-list',
+    component: TopList
+  }
   // {
   //   path: '/about',
   //   name: 'About',
@@ -18,7 +37,7 @@ const routes = [
 ]
 
 const router = createRouter({
-  history: createWebHashHistory(),
+  history: createWebHashHistory(process.env.BASE_URL),
   routes
 })
 

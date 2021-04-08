@@ -1,3 +1,5 @@
+const registerRouter = require('./backend/router')
+
 module.exports = {
   devServer: {
     // 自动开启浏览器
@@ -8,7 +10,10 @@ module.exports = {
     hot: true,
     port: 9100,
     // 将运行进度输出到控制台。
-    progress: true
+    progress: true,
+    before (app) {
+      registerRouter(app)
+    }
   },
   css: {
     sourceMap: process.env.NODE_ENV === `development`,
