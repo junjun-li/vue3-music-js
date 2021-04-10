@@ -880,6 +880,13 @@
   dependencies:
     "@better-scroll/shared-utils" "^2.2.1"
 
+"@better-scroll/observe-dom@^2.2.1":
+  "integrity" "sha1-iyBuAQd65OhKgGz9KY6RBPsXKcY="
+  "resolved" "https://registry.npm.taobao.org/@better-scroll/observe-dom/download/@better-scroll/observe-dom-2.2.1.tgz?cache=0&sync_timestamp=1614861891714&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2F%40better-scroll%2Fobserve-dom%2Fdownload%2F%40better-scroll%2Fobserve-dom-2.2.1.tgz"
+  "version" "2.2.1"
+  dependencies:
+    "@better-scroll/core" "^2.2.1"
+
 "@better-scroll/shared-utils@^2.2.1":
   "integrity" "sha1-6wJP7uHTdZipsE/BjKDYsx809wQ="
   "resolved" "https://registry.npm.taobao.org/@better-scroll/shared-utils/download/@better-scroll/shared-utils-2.2.1.tgz"

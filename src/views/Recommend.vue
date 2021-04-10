@@ -1,14 +1,41 @@
 <template>
   <div class="recommend">
-    <div class="recommend-content">
-      <div class="slider-wrapper">
-        <div class="slider-content">
-          <slider
-            v-if="sliders.length"
-            :sliders="sliders"/>
+    <Scroll class="recommend-content">
+      <!--better-scroll只对dom内部的第一个元素有效-->
+      <div>
+        <div class="slider-wrapper">
+          <div class="slider-content">
+            <slider
+              v-if="sliders.length"
+              :sliders="sliders"/>
+          </div>
+        </div>
+        <div class="recommend-list">
+          <h1 class="list-title">热门歌单推荐</h1>
+          <ul>
+            <li
+              v-for="item in albums"
+              :key="item.id"
+              class="item">
+              <div class="icon">
+                <img
+                  :src="item.pic"
+                  height="60"
+                  width="60">
+              </div>
+              <div class="text">
+                <h2 class="name">
+                  {{ item.username }}
+                </h2>
+                <p class="title">
+                  {{ item.title }}
+                </p>
+              </div>
+            </li>
+          </ul>
         </div>
       </div>
-    </div>
+    </Scroll>
   </div>
 </template>
 
@@ -16,16 +43,19 @@
 import { getRecommend } from '@/api'
 import { ref, watch, onMounted } from 'vue'
 import Slider from '@/components/Slider'
+import Scroll from '@/components/Scroll'
 
 export default {
   name: 'Recommend',
-  components: { Slider },
+  components: { Slider, Scroll },
   setup () {
     const sliders = ref([])
+    const albums = ref([])
     const _getRecommend = async () => {
       const res = await getRecommend()
       if (res.code === 0) {
         sliders.value = res.result.sliders
+        albums.value = res.result.albums
       }
     }
     onMounted(() => {
@@ -33,7 +63,8 @@ export default {
     })
 
     return {
-      sliders
+      sliders,
+      albums
     }
   }
 }

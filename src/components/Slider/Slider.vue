@@ -57,6 +57,7 @@ export default defineComponent({
   min-height: 1px;
   font-size: 0;
   touch-action: pan-y;
+  position: relative;
 
   .slider-group {
     position: relative;
