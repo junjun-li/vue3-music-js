@@ -86,7 +86,7 @@ export default defineComponent({
     left: 50%;
     bottom: 12px;
     line-height: 12px;
-    transform: translateX(-50%);
+    transform: translateX(-50%) translateZ(1px);
 
     .dot {
       display: inline-block;

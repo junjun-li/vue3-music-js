@@ -17,7 +17,9 @@ export default function useSlider (wrapper) {
       momentum: false,
       bounce: false,
       probeType: 2,
-      slide: true
+      slide: {
+        autoplay: false
+      }
     })
 
     // 幻灯片改变后, 会抛出index的值

@@ -1,5 +1,5 @@
 <template>
-  <div class="recommend">
+  <div class="recommend" v-loading:[loadingText]="loading">
     <Scroll class="recommend-content">
       <!--better-scroll只对dom内部的第一个元素有效-->
       <div>
@@ -11,7 +11,7 @@
           </div>
         </div>
         <div class="recommend-list">
-          <h1 class="list-title">热门歌单推荐</h1>
+          <h1 class="list-title" v-show="!loading">热门歌单推荐</h1>
           <ul>
             <li
               v-for="item in albums"
@@ -19,7 +19,7 @@
               class="item">
               <div class="icon">
                 <img
-                  :src="item.pic"
+                  v-lazy="item.pic"
                   height="60"
                   width="60">
               </div>
@@ -41,7 +41,7 @@
 
 <script>
 import { getRecommend } from '@/api'
-import { ref, watch, onMounted } from 'vue'
+import { ref, watch, onMounted, computed } from 'vue'
 import Slider from '@/components/Slider'
 import Scroll from '@/components/Scroll'
 
@@ -51,6 +51,10 @@ export default {
   setup () {
     const sliders = ref([])
     const albums = ref([])
+    const loadingText = ref('加载中...')
+    const loading = computed(() => {
+      return !sliders.value.length && !albums.value.length
+    })
     const _getRecommend = async () => {
       const res = await getRecommend()
       if (res.code === 0) {
@@ -64,7 +68,9 @@ export default {
 
     return {
       sliders,
-      albums
+      albums,
+      loading,
+      loadingText
     }
   }
 }

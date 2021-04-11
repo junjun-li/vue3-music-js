@@ -9665,7 +9665,7 @@
   "resolved" "https://registry.npm.taobao.org/vue-template-es2015-compiler/download/vue-template-es2015-compiler-1.9.1.tgz"
   "version" "1.9.1"
 
-"vue@^2 || ^3.0.0-0", "vue@^3.0.0", "vue@^3.0.2", "vue@3.0.11":
+"vue@^2 || ^3.0.0-0", "vue@^3.0.0", "vue@^3.0.0-alpha.9", "vue@^3.0.2", "vue@3.0.11":
   "integrity" "sha1-yC+VlMv03MhpJB1MjdPgjZqPS18="
   "resolved" "https://registry.npm.taobao.org/vue/download/vue-3.0.11.tgz"
   "version" "3.0.11"
@@ -9673,6 +9673,11 @@
     "@vue/compiler-dom" "3.0.11"
     "@vue/runtime-dom" "3.0.11"
     "@vue/shared" "3.0.11"
+
+"vue3-lazy@^1.0.0-alpha.1":
+  "integrity" "sha1-MmpWwq3kQwx2t6yQ0zp/3gr5qqY="
+  "resolved" "https://registry.npm.taobao.org/vue3-lazy/download/vue3-lazy-1.0.0-alpha.1.tgz"
+  "version" "1.0.0-alpha.1"
 
 "vuex@^4.0.0-0":
   "integrity" "sha1-rId6p2qcRTaMl5Rx5GG1INOObPU="
