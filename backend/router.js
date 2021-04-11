@@ -199,7 +199,7 @@ function registerRecommend(app) {
         // 往前端发送一个标准格式的响应数据，包括成功错误码和数据
         res.json({
           code: ERR_OK,
-          result: {
+          data: {
             sliders,
             albums
           }
@@ -288,7 +288,7 @@ function registerSingerList(app) {
 
         res.json({
           code: ERR_OK,
-          result: {
+          data: {
             singers: hot.concat(letter)
           }
         })
@@ -341,7 +341,7 @@ function registerSingerDetail(app) {
 
         res.json({
           code: ERR_OK,
-          result: {
+          data: {
             songs: songList
           }
         })
@@ -424,7 +424,7 @@ function registerSongsUrl(app) {
       // 所有请求响应完毕，urlMap 也就构造完毕了
       res.json({
         code: ERR_OK,
-        result: {
+        data: {
           map: urlMap
         }
       })
@@ -447,7 +447,7 @@ function registerLyric(app) {
       if (data.code === ERR_OK) {
         res.json({
           code: ERR_OK,
-          result: {
+          data: {
             lyric: Base64.decode(data.lyric)
           }
         })
@@ -492,7 +492,7 @@ function registerAlbum(app) {
 
         res.json({
           code: ERR_OK,
-          result: {
+          data: {
             songs: songList
           }
         })
@@ -546,7 +546,7 @@ function registerTopList(app) {
 
         res.json({
           code: ERR_OK,
-          result: {
+          data: {
             topList
           }
         })
@@ -595,7 +595,7 @@ function registerTopDetail(app) {
 
         res.json({
           code: ERR_OK,
-          result: {
+          data: {
             songs: songList
           }
         })
@@ -618,7 +618,7 @@ function registerHotKeys(app) {
       if (data.code === ERR_OK) {
         res.json({
           code: ERR_OK,
-          result: {
+          data: {
             hotKeys: data.data.hotkey.map((key) => {
               return {
                 key: key.k,
@@ -705,7 +705,7 @@ function registerSearch(app) {
 
         res.json({
           code: ERR_OK,
-          result: {
+          data: {
             songs: songList,
             singer,
             hasMore

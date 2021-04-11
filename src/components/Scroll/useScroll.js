@@ -6,13 +6,20 @@ import ObserveDOM from '@better-scroll/observe-dom'
 import { onMounted, ref, onUnmounted } from 'vue'
 
 BScroll.use(ObserveDOM)
-export default function useScroll (wrapper, options) {
+export default function useScroll (wrapper, options, emit) {
   const bs = ref(null)
   onMounted(() => {
     bs.value = new BScroll(wrapper.value, {
       observeDOM: true,
       ...options
     })
+
+    // 增加回调, 可以获取滚动的值
+    if (options.probeType > 0) {
+      bs.value.on('scroll', (pos) => {
+        emit('scroll', pos)
+      })
+    }
   })
 
   onUnmounted(() => {
