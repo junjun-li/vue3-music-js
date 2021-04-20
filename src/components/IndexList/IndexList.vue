@@ -1,8 +1,9 @@
 <template>
   <Scroll
+    ref="scrollRef"
     :probeType="3"
-    @scroll="onScroll"
-    class="index-list">
+    class="index-list"
+    @scroll="onScroll">
     <ul ref="groupRef">
       <li
         v-for="(group,index) in data"
@@ -23,16 +24,35 @@
         </ul>
       </li>
     </ul>
-    <div class="fixed" v-show="fixedTitle">
+    <div
+      v-show="fixedTitle"
+      :style="fixedStyle"
+      class="fixed">
       <div class="fixed-title">{{ fixedTitle }}</div>
+    </div>
+    <div
+      class="shortcut"
+      @touchstart.stop.prevent="onTouchstart"
+    >
+      <ul>
+        <li
+          v-for="(item, index) in shortcut"
+          :key="item"
+          :class="currentIndex === index ? 'current' : ''"
+          :data-index="index"
+          class="item">
+          {{ item }}
+        </li>
+      </ul>
     </div>
   </Scroll>
 </template>
 
 <script>
-import { defineComponent, ref } from 'vue'
+import { computed, defineComponent, ref } from 'vue'
 import Scroll from '@/components/Scroll/Scroll'
 import useFixed from './useFixed'
+import userShortcut from './userShortcut'
 
 export default defineComponent({
   name: 'IndexList',
@@ -49,12 +69,20 @@ export default defineComponent({
     // 2. 判断当前scrollY的值, 落在哪一个group的区间中, 拿到了index, 就可以拿到滚动的标题
 
     // scroll增加一个事件, 用于派发scrollY的值
-    const { groupRef, onScroll, fixedTitle } = useFixed(props)
-
+    const { groupRef, onScroll, fixedTitle, fixedStyle, currentIndex } = useFixed(props)
+    const { onTouchstart, scrollRef } = userShortcut(props, groupRef)
+    const shortcut = computed(() => {
+      return props.data.map(item => item.title)
+    })
     return {
       groupRef,
       onScroll,
-      fixedTitle
+      fixedTitle,
+      fixedStyle,
+      shortcut,
+      currentIndex,
+      scrollRef,
+      onTouchstart
     }
   }
 })

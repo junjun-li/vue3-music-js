@@ -25,4 +25,6 @@ export default function useScroll (wrapper, options, emit) {
   onUnmounted(() => {
     bs.value.disable()
   })
+
+  return bs
 }
