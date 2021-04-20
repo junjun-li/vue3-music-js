@@ -69,6 +69,10 @@ export default function useFixed (props) {
   function onScroll (pos) {
     scrollY.value = -pos.y
   }
+
+  watch(currentIndex, (newVal) => {
+    console.log(newVal)
+  })
   return {
     groupRef,
     onScroll,

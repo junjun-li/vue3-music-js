@@ -18,7 +18,9 @@ module.exports = {
     // 关闭对象的属性不能使用引号包裹
     'quote-props': 'off',
     // 可以使用反引号, 不强制使用单引号
-    'quotes': 'off'
+    'quotes': 'off',
+    // if else在新行
+    'brace-style': 'off'
 
   }
 }

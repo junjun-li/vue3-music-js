@@ -32,7 +32,8 @@
     </div>
     <div
       class="shortcut"
-      @touchstart.stop.prevent="onTouchstart"
+      @touchstart.stop.prevent="onTouchStart"
+      @touchmove.stop.prevent="onTouchMove"
     >
       <ul>
         <li
@@ -70,10 +71,8 @@ export default defineComponent({
 
     // scroll增加一个事件, 用于派发scrollY的值
     const { groupRef, onScroll, fixedTitle, fixedStyle, currentIndex } = useFixed(props)
-    const { onTouchstart, scrollRef } = userShortcut(props, groupRef)
-    const shortcut = computed(() => {
-      return props.data.map(item => item.title)
-    })
+    const { onTouchStart, onTouchMove, scrollRef, shortcut } = userShortcut(props, groupRef)
+
     return {
       groupRef,
       onScroll,
@@ -82,7 +81,8 @@ export default defineComponent({
       shortcut,
       currentIndex,
       scrollRef,
-      onTouchstart
+      onTouchStart,
+      onTouchMove
     }
   }
 })
