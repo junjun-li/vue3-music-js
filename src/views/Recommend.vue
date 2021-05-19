@@ -1,5 +1,7 @@
 <template>
-  <div class="recommend" v-loading:[loadingText]="loading">
+  <div
+    v-loading:[loadingText]="loading"
+    class="recommend">
     <Scroll class="recommend-content">
       <!--better-scroll只对dom内部的第一个元素有效-->
       <div>
@@ -7,11 +9,14 @@
           <div class="slider-content">
             <slider
               v-if="sliders.length"
-              :sliders="sliders"/>
+              :sliders="sliders" />
           </div>
         </div>
         <div class="recommend-list">
-          <h1 class="list-title" v-show="!loading">热门歌单推荐</h1>
+          <h1
+            v-show="!loading"
+            class="list-title">热门歌单推荐
+          </h1>
           <ul>
             <li
               v-for="item in albums"
@@ -53,7 +58,7 @@ export default {
     const albums = ref([])
     const loadingText = ref('加载中...')
     const loading = computed(() => {
-      return !sliders.value.length && !albums.value.length
+      return !sliders.value.length || !albums.value.length
     })
     const _getRecommend = async () => {
       const res = await getRecommend()

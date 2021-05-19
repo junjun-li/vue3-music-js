@@ -1,6 +1,7 @@
 <template>
   <div class="singer" v-loading="loading">
-    <IndexList :data="singerList"></IndexList>
+    <IndexList :data="singerList" @goToSingerDetail="goToSingerDetail"></IndexList>
+    <router-view :singer="singer"/>
   </div>
 </template>
 
@@ -8,11 +9,14 @@
 import { getSingerList } from '@/api'
 import { computed, defineComponent, onMounted, ref } from 'vue'
 import IndexList from '@/components/IndexList/IndexList'
+import { useRouter } from 'vue-router'
 
 export default defineComponent({
   name: 'Singer',
   components: { IndexList },
   setup () {
+    const router = useRouter()
+    const singer = ref({})
     const singerList = ref([])
     const _getSingerList = async () => {
       const res = await getSingerList()
@@ -23,13 +27,22 @@ export default defineComponent({
     const loading = computed(() => {
       return !singerList.value.length
     })
+    const goToSingerDetail = (item) => {
+      console.log(item)
+      singer.value = item
+      router.push({
+        path: `/singer/${item.mid}`
+      })
+    }
     onMounted(() => {
       _getSingerList()
     })
 
     return {
       singerList,
-      loading
+      loading,
+      singer,
+      goToSingerDetail
     }
   }
 })

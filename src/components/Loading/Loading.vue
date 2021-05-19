@@ -4,7 +4,7 @@
       <img
         height="24"
         src="./loading.gif"
-        width="24">
+        width="24" />
       <p class="desc">{{ title }}</p>
     </div>
   </div>

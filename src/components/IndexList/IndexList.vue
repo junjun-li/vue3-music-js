@@ -14,7 +14,9 @@
           <li
             v-for="item in group.list"
             :key="item.id"
-            class="item">
+            class="item"
+
+            @click="goToSingerDetail(item)">
             <img
               v-lazy="item.pic"
               :alt="item.pic"
@@ -33,8 +35,7 @@
     <div
       class="shortcut"
       @touchstart.stop.prevent="onTouchStart"
-      @touchmove.stop.prevent="onTouchMove"
-    >
+      @touchmove.stop.prevent="onTouchMove">
       <ul>
         <li
           v-for="(item, index) in shortcut"
@@ -54,6 +55,7 @@ import { computed, defineComponent, ref } from 'vue'
 import Scroll from '@/components/Scroll/Scroll'
 import useFixed from './useFixed'
 import userShortcut from './userShortcut'
+import { useRoute, useRouter } from 'vue-router'
 
 export default defineComponent({
   name: 'IndexList',
@@ -64,7 +66,9 @@ export default defineComponent({
     }
   },
   components: { Scroll },
-  setup (props) {
+  emits: ['goToSingerDetail'],
+  setup (props, { emit }) {
+    const router = useRouter()
     // 需求: 动态的替换fixedTitle
     // 1. 计算每一个group的高度, 是一个数组
     // 2. 判断当前scrollY的值, 落在哪一个group的区间中, 拿到了index, 就可以拿到滚动的标题
@@ -72,7 +76,14 @@ export default defineComponent({
     // scroll增加一个事件, 用于派发scrollY的值
     const { groupRef, onScroll, fixedTitle, fixedStyle, currentIndex } = useFixed(props)
     const { onTouchStart, onTouchMove, scrollRef, shortcut } = userShortcut(props, groupRef)
-
+    const goToSingerDetail = (item) => {
+      emit('goToSingerDetail', item)
+      // console.log(item)
+      // console.log(item.mid)
+      // router.push({
+      //   path: `/singer/${item.mid}`
+      // })
+    }
     return {
       groupRef,
       onScroll,
@@ -82,7 +93,8 @@ export default defineComponent({
       currentIndex,
       scrollRef,
       onTouchStart,
-      onTouchMove
+      onTouchMove,
+      goToSingerDetail
     }
   }
 })

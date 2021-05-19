@@ -13,9 +13,6 @@ export default function userShortcut (props, groupRef) {
   const onTouchStart = (e) => {
     // 手指刚开始按下的坐标
     touch.y1 = e.touches[0].pageY
-    console.log(touch.y1)
-    console.log(e)
-    console.log(e.target.dataset)
     let anchorIndex
     if (e.target.dataset.index) {
       anchorIndex = parseInt(e.target.dataset.index)
@@ -45,7 +42,6 @@ export default function userShortcut (props, groupRef) {
     const anchorIndex = touch.anchorIndex + moveBlock
 
     scrollTo(anchorIndex)
-    console.log(touch)
   }
 
   const scrollTo = (index) => {
