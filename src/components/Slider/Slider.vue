@@ -8,7 +8,9 @@
         :key="item.id"
         class="slider-page">
         <a :href="item.link">
-          <img :src="item.pic"/>
+          <img
+            :alt="item.pic"
+            :src="item.pic" />
         </a>
       </div>
     </div>

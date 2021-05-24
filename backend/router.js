@@ -238,7 +238,6 @@ function registerSingerList(app) {
       if (data.code === ERR_OK) {
         // 处理歌手列表数据
         const singerList = data.singerList.data.singerlist
-
         // 构造歌手 Map 数据结构
         const singerMap = {
           hot: {

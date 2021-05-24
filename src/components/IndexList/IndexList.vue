@@ -2,48 +2,40 @@
   <Scroll
     ref="scrollRef"
     :probeType="3"
-    class="index-list"
-    @scroll="onScroll">
+    class="index-list">
     <ul ref="groupRef">
       <li
         v-for="(group,index) in data"
         :key="index"
         class="group">
-        <h2 class="title">{{ group.title }}</h2>
+        <h2 class="title">{{group.title}}</h2>
         <ul>
           <li
             v-for="item in group.list"
             :key="item.id"
-            class="item"
-
-            @click="goToSingerDetail(item)">
+            class="item">
             <img
               v-lazy="item.pic"
               :alt="item.pic"
-              class="avatar">
-            <span class="name">{{ item.name }}</span>
+              class="avatar" />
+            <span class="name">{{item.name}}</span>
           </li>
         </ul>
       </li>
     </ul>
     <div
-      v-show="fixedTitle"
-      :style="fixedStyle"
-      class="fixed">
-      <div class="fixed-title">{{ fixedTitle }}</div>
-    </div>
-    <div
-      class="shortcut"
-      @touchstart.stop.prevent="onTouchStart"
-      @touchmove.stop.prevent="onTouchMove">
-      <ul>
+      class="shortcut">
+      <ul
+        @touchstart.stop.prevent="onTouchstart"
+        @touchmove.stop.prevent="onTouchmove"
+      >
         <li
           v-for="(item, index) in shortcut"
           :key="item"
-          :class="currentIndex === index ? 'current' : ''"
+          :class="index === currentIndex ? 'current' : ''"
           :data-index="index"
           class="item">
-          {{ item }}
+          {{item}}
         </li>
       </ul>
     </div>
@@ -53,9 +45,8 @@
 <script>
 import { computed, defineComponent, ref } from 'vue'
 import Scroll from '@/components/Scroll/Scroll'
-import useFixed from './useFixed'
-import userShortcut from './userShortcut'
 import { useRoute, useRouter } from 'vue-router'
+import useShortcut from './useShortcut'
 
 export default defineComponent({
   name: 'IndexList',
@@ -66,35 +57,21 @@ export default defineComponent({
     }
   },
   components: { Scroll },
-  emits: ['goToSingerDetail'],
   setup (props, { emit }) {
     const router = useRouter()
-    // 需求: 动态的替换fixedTitle
-    // 1. 计算每一个group的高度, 是一个数组
-    // 2. 判断当前scrollY的值, 落在哪一个group的区间中, 拿到了index, 就可以拿到滚动的标题
-
-    // scroll增加一个事件, 用于派发scrollY的值
-    const { groupRef, onScroll, fixedTitle, fixedStyle, currentIndex } = useFixed(props)
-    const { onTouchStart, onTouchMove, scrollRef, shortcut } = userShortcut(props, groupRef)
-    const goToSingerDetail = (item) => {
-      emit('goToSingerDetail', item)
-      // console.log(item)
-      // console.log(item.mid)
-      // router.push({
-      //   path: `/singer/${item.mid}`
-      // })
-    }
+    const shortcut = computed(() => {
+      return props.data.map(item => item.title)
+    })
+    const scrollRef = ref(null)
+    const groupRef = ref(null)
+    const { currentIndex, onTouchstart, onTouchmove } = useShortcut(scrollRef, groupRef)
     return {
-      groupRef,
-      onScroll,
-      fixedTitle,
-      fixedStyle,
       shortcut,
-      currentIndex,
       scrollRef,
-      onTouchStart,
-      onTouchMove,
-      goToSingerDetail
+      groupRef,
+      currentIndex,
+      onTouchstart,
+      onTouchmove
     }
   }
 })
