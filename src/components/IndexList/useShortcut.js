@@ -17,7 +17,6 @@ const useShortcut = (scrollRef, groupRef) => {
     touch.y1 = e.touches[0].pageY
     touch.currentIndex = currentIndex
     scrollTo(currentIndex)
-    console.log(touch)
   }
 
   const onTouchmove = (e) => {
@@ -30,7 +29,6 @@ const useShortcut = (scrollRef, groupRef) => {
   const scrollTo = (index) => {
     if (isNaN(index)) return
     // 限定index的值 0 <= index <= groupRef.value.children.length
-
     index = Math.max(0, Math.min(groupRef.value.children.length - 1, index))
     const targetEl = groupRef.value.children[index]
     scrollRef.value.scroll.scrollToElement(targetEl, 0)

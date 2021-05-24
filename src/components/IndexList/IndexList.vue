@@ -2,7 +2,8 @@
   <Scroll
     ref="scrollRef"
     :probeType="3"
-    class="index-list">
+    class="index-list"
+    @scroll="onScroll">
     <ul ref="groupRef">
       <li
         v-for="(group,index) in data"
@@ -27,8 +28,7 @@
       class="shortcut">
       <ul
         @touchstart.stop.prevent="onTouchstart"
-        @touchmove.stop.prevent="onTouchmove"
-      >
+        @touchmove.stop.prevent="onTouchmove">
         <li
           v-for="(item, index) in shortcut"
           :key="item"
@@ -39,6 +39,12 @@
         </li>
       </ul>
     </div>
+    <div
+      v-show="fixedTitle !== ''"
+      class="fixed"
+      :style="fixedStyle">
+      <div class="fixed-title">{{fixedTitle}}</div>
+    </div>
   </Scroll>
 </template>
 
@@ -47,6 +53,7 @@ import { computed, defineComponent, ref } from 'vue'
 import Scroll from '@/components/Scroll/Scroll'
 import { useRoute, useRouter } from 'vue-router'
 import useShortcut from './useShortcut'
+import useFixed from './useFixed'
 
 export default defineComponent({
   name: 'IndexList',
@@ -65,13 +72,17 @@ export default defineComponent({
     const scrollRef = ref(null)
     const groupRef = ref(null)
     const { currentIndex, onTouchstart, onTouchmove } = useShortcut(scrollRef, groupRef)
+    const { fixedTitle, fixedStyle, onScroll } = useFixed(groupRef, props, shortcut)
     return {
       shortcut,
       scrollRef,
       groupRef,
       currentIndex,
+      fixedTitle,
+      fixedStyle,
       onTouchstart,
-      onTouchmove
+      onTouchmove,
+      onScroll
     }
   }
 })
