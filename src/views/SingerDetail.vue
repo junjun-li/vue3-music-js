@@ -12,30 +12,37 @@
         @click="goBack">
         <i class="icon-back"></i>
       </div>
-      <h1 class="title">{{ name }}</h1>
+      <h1 class="title">{{name}}</h1>
       <div
         ref="bgImageRef"
-        class="bg-image"></div>
-      <div class="filter"></div>
+        :style="bgImageStyle"
+        class="bg-image">
+        <!--蒙版层-->
+        <div
+          :style="filterStyle"
+          class="filter" />
+      </div>
       <Scroll
         ref="scroll"
+        :probeType="3"
         :style="listStyle"
-        class="list">
-        <!--<div class="song-list-wrapper">-->
-        <!--歌单列表-->
-        <!--<SongList :songs="songList"/>-->
-        <ul class="song-list">
-          <li
-            v-for="song in songList"
-            :key="song.id"
-            class="item">
-            <div class="content">
-              <h2 class="name">{{ song.name }}</h2>
-              <p class="desc">{{ getDesc(song) }}</p>
-            </div>
-          </li>
-        </ul>
-        <!--</div>-->
+        class="list"
+        @scroll="onScroll">
+        <div class="song-list-wrapper">
+          <!--歌单列表-->
+          <!--<SongList :songs="songList"/>-->
+          <ul class="song-list">
+            <li
+              v-for="song in songList"
+              :key="song.id"
+              class="item">
+              <div class="content">
+                <h2 class="name">{{song.name}}</h2>
+                <p class="desc">{{getDesc(song)}}</p>
+              </div>
+            </li>
+          </ul>
+        </div>
       </Scroll>
     </div>
   </div>
@@ -43,11 +50,12 @@
 
 <script>
 import { getSingerDetail, processSongs } from '@/api'
-import { onMounted, ref, defineComponent, computed } from 'vue'
+import { onMounted, ref, defineComponent, computed, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import MusicList from '@/components/MusicList/MusicList'
 import SongList from '@/components/SongList/SongList'
 import Scroll from '@/components/Scroll/Scroll'
+import store from 'store'
 
 export default defineComponent({
   name: 'SingerDetail',
@@ -63,17 +71,63 @@ export default defineComponent({
     // MusicList
   },
   setup (props) {
+    const TITLE_HEIGHT = 40
+    // 照片到顶部最大的偏移高度
+    const maxTranslateY = ref(0)
     const route = useRoute()
     const router = useRouter()
     const singerId = ref('')
     const songList = ref([])
     const bgImageRef = ref(null)
     const listStyle = ref({})
+    const scrollY = ref(0)
+    const singerInfo = ref({})
     const name = computed(() => {
-      return props.singer && props.singer.name
+      return singerInfo.value && singerInfo.value.name
     })
     const pic = computed(() => {
-      return props.singer && props.singer.pic
+      return singerInfo.value && singerInfo.value.pic
+    })
+
+    // 背景图片的style
+    const bgImageStyle = computed(() => {
+      const _scrollY = scrollY.value
+      const _maxTranslateY = maxTranslateY.value
+      let zIndex = 0
+      let paddingTop = '70%'
+      let height = '0px'
+      let translateZ = 0
+      if (_scrollY > _maxTranslateY) {
+        zIndex = 10
+        paddingTop = 0
+        height = '40px'
+        translateZ = 2
+      }
+      let scale = 1
+      if (_scrollY < 0) {
+        // 下拉了多少 / 图片的高度
+        scale = 1 + Math.abs(_scrollY / bgImageRef.value.clientHeight)
+      }
+      return {
+        zIndex,
+        paddingTop,
+        height,
+        transform: `scale(${scale})translateZ(${translateZ}px)`
+      }
+    })
+
+    // 蒙版层的style
+    const filterStyle = computed(() => {
+      const imgHeight = bgImageRef.value && bgImageRef.value.clientHeight
+      let blur = 0
+      const _scrollY = scrollY.value
+      const _maxTranslateY = maxTranslateY.value
+      if (_scrollY > 0) {
+        blur = Math.min(_maxTranslateY / imgHeight, _scrollY / imgHeight) * 10
+      }
+      return {
+        backdropFilter: `blur(${blur}px)`
+      }
     })
     const _getSingerDetail = async () => {
       const res = await getSingerDetail(singerId.value)
@@ -85,19 +139,35 @@ export default defineComponent({
     const getDesc = (song) => {
       return `${song.singer}·${song.album}`
     }
+    const onScroll = (pos) => {
+      scrollY.value = -pos.y
+    }
+
     onMounted(() => {
-      if (!route.params.id) {
-        router.push(`/singer`)
-        return
+      const _singer = props.singer.value
+      if (_singer) {
+        singerInfo.value = _singer
       }
       else {
-        singerId.value = route.params.id
-        _getSingerDetail()
+        // 去本地缓存找, 并且路由id === 缓存的id
+        const singerDetailInfo = store.get(`singerDetailInfo`)
+        if (singerDetailInfo.mid === route.params.id) {
+          singerInfo.value = store.get(`singerDetailInfo`)
+        }
+        else {
+          router.push(`/singer`)
+          return
+        }
       }
-      bgImageRef.value.style.backgroundImage = `url(${pic.value})`
+      singerId.value = route.params.id
+      _getSingerDetail()
 
+      const bgImage = bgImageRef.value
+      bgImage.style.backgroundImage = pic.value ? `url(${pic.value})` : 'none'
+      const bgHeight = bgImage.clientHeight
+      maxTranslateY.value = bgHeight - TITLE_HEIGHT
       listStyle.value = {
-        top: `${bgImageRef.value.clientHeight}px`
+        top: `${bgHeight}px`
       }
     })
 
@@ -107,8 +177,12 @@ export default defineComponent({
       listStyle,
       pic,
       name,
+      bgImageStyle,
+      filterStyle,
+      scrollY,
       goBack,
-      getDesc
+      getDesc,
+      onScroll
     }
   }
 })
@@ -174,6 +248,15 @@ export default defineComponent({
     transform: scale(1) translateZ(0px);
   }
 
+  .filter {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(7, 17, 27, 0.4);
+  }
+
   .list {
     position: absolute;
     bottom: 0;
@@ -192,9 +275,6 @@ export default defineComponent({
 
 // 这个是song-list组件
 .song-list {
-  padding: 20px 30px;
-  background: $color-background;
-
   .item {
     display: flex;
     align-items: center;

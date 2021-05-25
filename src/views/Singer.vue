@@ -1,7 +1,11 @@
 <template>
-  <div class="singer" v-loading="loading">
-    <IndexList :data="singerList" @goToSingerDetail="goToSingerDetail"></IndexList>
-    <router-view :singer="singer"/>
+  <div
+    v-loading="loading"
+    class="singer">
+    <IndexList
+      :data="singerList"
+      @goToSingerDetail="goToSingerDetail" />
+    <router-view :singer="singer" />
   </div>
 </template>
 
@@ -10,6 +14,7 @@ import { getSingerList } from '@/api'
 import { computed, defineComponent, onMounted, ref } from 'vue'
 import IndexList from '@/components/IndexList/IndexList'
 import { useRouter } from 'vue-router'
+import store from 'store'
 
 export default defineComponent({
   name: 'Singer',
@@ -28,7 +33,7 @@ export default defineComponent({
       return !singerList.value.length
     })
     const goToSingerDetail = (item) => {
-      console.log(item)
+      store.set(`singerDetailInfo`, item)
       singer.value = item
       router.push({
         path: `/singer/${item.mid}`

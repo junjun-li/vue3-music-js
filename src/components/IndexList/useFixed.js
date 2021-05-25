@@ -16,7 +16,6 @@ const useFixed = (groupRef, props, shortcut) => {
     return shortcut.value[currentIndex.value]
   })
   const fixedStyle = computed(() => {
-    console.log(distance.value)
     const distanceVal = distance.value
     const diff = (distanceVal > 0 && distanceVal < TITLE_HEIGHT) ? distanceVal - TITLE_HEIGHT : 0
     return {
@@ -29,10 +28,11 @@ const useFixed = (groupRef, props, shortcut) => {
 
   // 计算每一个group的高度[0, 700, 130+700]
   const calculate = () => {
+    const group = groupRef.value.children
     let height = 0
     const list = [0]
-    for (let i = 0; i < groupRef.value.children.length; i++) {
-      height += groupRef.value.children[i].clientHeight
+    for (let i = 0; i < group.length; i++) {
+      height += group[i].clientHeight
       list.push(height)
     }
     listHeight.value = list
@@ -59,6 +59,7 @@ const useFixed = (groupRef, props, shortcut) => {
   return {
     fixedTitle,
     fixedStyle,
+    currentIndex,
     onScroll
   }
 }

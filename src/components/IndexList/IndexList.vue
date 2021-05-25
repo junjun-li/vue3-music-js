@@ -14,7 +14,8 @@
           <li
             v-for="item in group.list"
             :key="item.id"
-            class="item">
+            class="item"
+            @click="goToSingerDetail(item)">
             <img
               v-lazy="item.pic"
               :alt="item.pic"
@@ -41,8 +42,8 @@
     </div>
     <div
       v-show="fixedTitle !== ''"
-      class="fixed"
-      :style="fixedStyle">
+      :style="fixedStyle"
+      class="fixed">
       <div class="fixed-title">{{fixedTitle}}</div>
     </div>
   </Scroll>
@@ -71,8 +72,12 @@ export default defineComponent({
     })
     const scrollRef = ref(null)
     const groupRef = ref(null)
-    const { currentIndex, onTouchstart, onTouchmove } = useShortcut(scrollRef, groupRef)
-    const { fixedTitle, fixedStyle, onScroll } = useFixed(groupRef, props, shortcut)
+    const { onTouchstart, onTouchmove } = useShortcut(scrollRef, groupRef)
+    const { fixedTitle, fixedStyle, onScroll, currentIndex } = useFixed(groupRef, props, shortcut)
+    const goToSingerDetail = (item) => {
+      emit('goToSingerDetail', item)
+    }
+
     return {
       shortcut,
       scrollRef,
@@ -82,7 +87,8 @@ export default defineComponent({
       fixedStyle,
       onTouchstart,
       onTouchmove,
-      onScroll
+      onScroll,
+      goToSingerDetail
     }
   }
 })
