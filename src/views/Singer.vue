@@ -5,7 +5,15 @@
     <IndexList
       :data="singerList"
       @goToSingerDetail="goToSingerDetail" />
-    <router-view :singer="singer" />
+    <router-view v-slot="{ Component }">
+      <transition
+        appear
+        name="slide">
+        <component
+          :is="Component"
+          :singer="singer" />
+      </transition>
+    </router-view>
   </div>
 </template>
 
