@@ -1,6 +1,6 @@
 <template>
   <div
-    v-loading="loading"
+    v-loading:[loadingText]="loading"
     class="singer">
     <IndexList
       :data="singerList"
@@ -28,6 +28,7 @@ export default defineComponent({
   name: 'Singer',
   components: { IndexList },
   setup () {
+    const loadingText = ref('加载中...')
     const router = useRouter()
     const singer = ref({})
     const singerList = ref([])
@@ -55,6 +56,7 @@ export default defineComponent({
       singerList,
       loading,
       singer,
+      loadingText,
       goToSingerDetail
     }
   }

@@ -22,11 +22,14 @@
           :style="filterStyle"
           class="filter" />
       </div>
+      <!--        v-no-data="isNoData"-->
       <Scroll
         ref="scroll"
         :probeType="3"
         :style="listStyle"
         class="list"
+        v-loading:[loadingText]="loading"
+        v-noData:[noDataText]="isNoData"
         @scroll="onScroll">
         <div class="song-list-wrapper">
           <!--歌单列表-->
@@ -71,7 +74,11 @@ export default defineComponent({
     // MusicList
   },
   setup (props) {
+    // todo: 这里逻辑太乱了
+    // 需要剥离
     const TITLE_HEIGHT = 40
+    const loadingText = ref('详情页加载中...')
+    const noDataText = ref('详情页无数据...')
     // 照片到顶部最大的偏移高度
     const maxTranslateY = ref(0)
     const route = useRoute()
@@ -129,10 +136,17 @@ export default defineComponent({
         backdropFilter: `blur(${blur}px)`
       }
     })
+    const loading = ref(true)
     const _getSingerDetail = async () => {
       const res = await getSingerDetail(singerId.value)
       songList.value = await processSongs(res.data.songs)
+      songList.value = []
+      loading.value = false
+      console.log(songList.value)
     }
+    const isNoData = computed(() => {
+      return !songList.value || !songList.value.length
+    })
     const goBack = () => {
       router.back()
     }
@@ -180,6 +194,10 @@ export default defineComponent({
       bgImageStyle,
       filterStyle,
       scrollY,
+      loading,
+      isNoData,
+      loadingText,
+      noDataText,
       goBack,
       getDesc,
       onScroll
