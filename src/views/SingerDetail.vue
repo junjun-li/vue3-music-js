@@ -17,28 +17,36 @@
         ref="bgImageRef"
         :style="bgImageStyle"
         class="bg-image">
+        <div
+          class="play-btn-wrapper"
+          @click="randomPlay">
+          <div class="play-btn">
+            <i class="icon-play"></i>
+            <span class="text">随机播放全部</span>
+          </div>
+        </div>
         <!--蒙版层-->
         <div
           :style="filterStyle"
           class="filter" />
       </div>
-      <!--        v-no-data="isNoData"-->
       <Scroll
         ref="scroll"
+        v-loading:[loadingText]="loading"
+        v-noData:[noDataText]="isNoData"
         :probeType="3"
         :style="listStyle"
         class="list"
-        v-loading:[loadingText]="loading"
-        v-noData:[noDataText]="isNoData"
         @scroll="onScroll">
         <div class="song-list-wrapper">
           <!--歌单列表-->
           <!--<SongList :songs="songList"/>-->
           <ul class="song-list">
             <li
-              v-for="song in songList"
+              v-for="(song,index) in songList"
               :key="song.id"
-              class="item">
+              class="item"
+              @click="selectPlay(index)">
               <div class="content">
                 <h2 class="name">{{song.name}}</h2>
                 <p class="desc">{{getDesc(song)}}</p>
@@ -58,7 +66,8 @@ import { useRoute, useRouter } from 'vue-router'
 import MusicList from '@/components/MusicList/MusicList'
 import SongList from '@/components/SongList/SongList'
 import Scroll from '@/components/Scroll/Scroll'
-import store from 'store'
+import _store from 'store'
+import { useStore } from 'vuex'
 
 export default defineComponent({
   name: 'SingerDetail',
@@ -74,6 +83,7 @@ export default defineComponent({
     // MusicList
   },
   setup (props) {
+    const store = useStore()
     // todo: 这里逻辑太乱了
     // 需要剥离
     const TITLE_HEIGHT = 40
@@ -140,9 +150,7 @@ export default defineComponent({
     const _getSingerDetail = async () => {
       const res = await getSingerDetail(singerId.value)
       songList.value = await processSongs(res.data.songs)
-      songList.value = []
       loading.value = false
-      console.log(songList.value)
     }
     const isNoData = computed(() => {
       return !songList.value || !songList.value.length
@@ -156,7 +164,15 @@ export default defineComponent({
     const onScroll = (pos) => {
       scrollY.value = -pos.y
     }
-
+    const selectPlay = (index) => {
+      store.dispatch('selectPlay', {
+        list: songList.value,
+        index
+      })
+    }
+    const randomPlay = () => {
+      store.dispatch('randomPlay', songList.value)
+    }
     onMounted(() => {
       const _singer = props.singer.value
       if (_singer) {
@@ -164,9 +180,9 @@ export default defineComponent({
       }
       else {
         // 去本地缓存找, 并且路由id === 缓存的id
-        const singerDetailInfo = store.get(`singerDetailInfo`)
+        const singerDetailInfo = _store.get(`singerDetailInfo`)
         if (singerDetailInfo.mid === route.params.id) {
-          singerInfo.value = store.get(`singerDetailInfo`)
+          singerInfo.value = _store.get(`singerDetailInfo`)
         }
         else {
           router.push(`/singer`)
@@ -200,7 +216,9 @@ export default defineComponent({
       noDataText,
       goBack,
       getDesc,
-      onScroll
+      onScroll,
+      selectPlay,
+      randomPlay
     }
   }
 })
@@ -264,15 +282,47 @@ export default defineComponent({
     height: 0px;
     background-image: url(http://y.gtimg.cn/music/photo_new/T001R800x800M0000025NhlN2yWrP4.jpg);
     transform: scale(1) translateZ(0px);
-  }
 
-  .filter {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(7, 17, 27, 0.4);
+    .play-btn-wrapper {
+      position: absolute;
+      bottom: 20px;
+      z-index: 10;
+      width: 100%;
+
+      .play-btn {
+        box-sizing: border-box;
+        width: 135px;
+        padding: 7px 0;
+        margin: 0 auto;
+        text-align: center;
+        border: 1px solid #ffcd32;
+        color: #ffcd32;
+        border-radius: 100px;
+        font-size: 0;
+
+        .icon-play {
+          display: inline-block;
+          vertical-align: middle;
+          margin-right: 6px;
+          font-size: $font-size-medium-x;
+        }
+
+        .text {
+          display: inline-block;
+          vertical-align: middle;
+          font-size: 12px;
+        }
+      }
+    }
+
+    .filter {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(7, 17, 27, 0.4);
+    }
   }
 
   .list {
