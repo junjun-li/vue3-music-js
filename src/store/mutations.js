@@ -1,24 +1,33 @@
+import {
+  SET_PLAYING,
+  SET_SEQUENCE_LIST,
+  SET_PLAYLIST,
+  SET_PLAY_MODE,
+  SET_CURRENT_PLAY_INDEX,
+  SET_FULL_SCREEN,
+  SET_FAVORITE_LIST
+} from './mutations_types'
 
 const mutations = {
-  setPlaying (state, playing) {
+  [SET_PLAYING] (state, playing) {
     state.playing = playing
   },
-  setSequenceList (state, list) {
+  [SET_SEQUENCE_LIST] (state, list) {
     state.sequenceList = list
   },
-  setPlaylist (state, list) {
+  [SET_PLAYLIST] (state, list) {
     state.playlist = list
   },
-  setPlayMode (state, mode) {
+  [SET_PLAY_MODE] (state, mode) {
     state.playMode = mode
   },
-  setCurrentPlayIndex (state, index) {
+  [SET_CURRENT_PLAY_INDEX] (state, index) {
     state.currentPlayIndex = index
   },
-  setFullScreen (state, fullScreen) {
+  [SET_FULL_SCREEN] (state, fullScreen) {
     state.fullScreen = fullScreen
   },
-  setFavoriteList (state, list) {
+  [SET_FAVORITE_LIST] (state, list) {
     state.favoriteList = list
   }
 }

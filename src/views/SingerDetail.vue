@@ -149,11 +149,11 @@ export default defineComponent({
     const loading = ref(true)
     const _getSingerDetail = async () => {
       const res = await getSingerDetail(singerId.value)
-      songList.value = await processSongs(res.data.songs)
+      songList.value = await processSongs(res.result.songs)
       loading.value = false
     }
     const isNoData = computed(() => {
-      return !songList.value || !songList.value.length
+      return !loading.value && (Array.isArray(songList.value) && songList.value.length === 0)
     })
     const goBack = () => {
       router.back()

@@ -1,6 +1,14 @@
 import { shuffle } from '@/utils'
 import { PLAY_MODE } from '@/utils/constant'
-
+import {
+  SET_PLAYING,
+  SET_SEQUENCE_LIST,
+  SET_PLAYLIST,
+  SET_PLAY_MODE,
+  SET_CURRENT_PLAY_INDEX,
+  SET_FULL_SCREEN,
+  SET_FAVORITE_LIST
+} from './mutations_types'
 export default {
   /**
    * @param commit
@@ -14,20 +22,19 @@ export default {
     // 4. 设置播放的index
     // 5. 设置全屏播放
     // 6. 设置真实的播放列表(因为可能是随机播放)
-    commit('setPlayMode', PLAY_MODE.sqeuence)
-    commit('setSequenceList', list)
-    commit('setPlaying', true)
-    commit('setCurrentPlayIndex', index)
-    commit('setFullScreen', true)
-    commit('setPlaylist', list)
+    commit(SET_PLAY_MODE, PLAY_MODE.sqeuence)
+    commit(SET_SEQUENCE_LIST, list)
+    commit(SET_PLAYING, true)
+    commit(SET_CURRENT_PLAY_INDEX, index)
+    commit(SET_FULL_SCREEN, true)
+    commit(SET_PLAYLIST, list)
   },
   randomPlay ({ commit }, list) {
-    console.log(list)
-    commit('setPlayMode', PLAY_MODE.random)
-    commit('setSequenceList', list)
-    commit('setPlaying', true)
-    commit('setCurrentPlayIndex', 0)
-    commit('setFullScreen', true)
-    commit('setPlaylist', shuffle(list))
+    commit(SET_PLAY_MODE, PLAY_MODE.random)
+    commit(SET_SEQUENCE_LIST, list)
+    commit(SET_PLAYING, true)
+    commit(SET_CURRENT_PLAY_INDEX, 0)
+    commit(SET_FULL_SCREEN, true)
+    commit(SET_PLAYLIST, shuffle(list))
   }
 }

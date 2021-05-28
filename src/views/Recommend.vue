@@ -63,8 +63,8 @@ export default {
     const _getRecommend = async () => {
       const res = await getRecommend()
       if (res.code === 0) {
-        sliders.value = res.data.sliders
-        albums.value = res.data.albums
+        sliders.value = res.result.sliders
+        albums.value = res.result.albums
       }
     }
     onMounted(() => {

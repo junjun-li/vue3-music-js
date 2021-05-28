@@ -22,7 +22,7 @@ export const processSongs = (songs) => {
       mid
     }
   }).then((result) => {
-    const map = result.data.map
+    const map = result.result.map
     return songs.map((song) => {
       song.url = map[song.mid]
       return song

@@ -199,7 +199,7 @@ function registerRecommend(app) {
         // 往前端发送一个标准格式的响应数据，包括成功错误码和数据
         res.json({
           code: ERR_OK,
-          data: {
+          result: {
             sliders,
             albums
           }
@@ -238,6 +238,7 @@ function registerSingerList(app) {
       if (data.code === ERR_OK) {
         // 处理歌手列表数据
         const singerList = data.singerList.data.singerlist
+
         // 构造歌手 Map 数据结构
         const singerMap = {
           hot: {
@@ -287,7 +288,7 @@ function registerSingerList(app) {
 
         res.json({
           code: ERR_OK,
-          data: {
+          result: {
             singers: hot.concat(letter)
           }
         })
@@ -340,7 +341,7 @@ function registerSingerDetail(app) {
 
         res.json({
           code: ERR_OK,
-          data: {
+          result: {
             songs: songList
           }
         })
@@ -423,7 +424,7 @@ function registerSongsUrl(app) {
       // 所有请求响应完毕，urlMap 也就构造完毕了
       res.json({
         code: ERR_OK,
-        data: {
+        result: {
           map: urlMap
         }
       })
@@ -446,7 +447,7 @@ function registerLyric(app) {
       if (data.code === ERR_OK) {
         res.json({
           code: ERR_OK,
-          data: {
+          result: {
             lyric: Base64.decode(data.lyric)
           }
         })
@@ -491,7 +492,7 @@ function registerAlbum(app) {
 
         res.json({
           code: ERR_OK,
-          data: {
+          result: {
             songs: songList
           }
         })
@@ -545,7 +546,7 @@ function registerTopList(app) {
 
         res.json({
           code: ERR_OK,
-          data: {
+          result: {
             topList
           }
         })
@@ -594,7 +595,7 @@ function registerTopDetail(app) {
 
         res.json({
           code: ERR_OK,
-          data: {
+          result: {
             songs: songList
           }
         })
@@ -617,7 +618,7 @@ function registerHotKeys(app) {
       if (data.code === ERR_OK) {
         res.json({
           code: ERR_OK,
-          data: {
+          result: {
             hotKeys: data.data.hotkey.map((key) => {
               return {
                 key: key.k,
@@ -704,7 +705,7 @@ function registerSearch(app) {
 
         res.json({
           code: ERR_OK,
-          data: {
+          result: {
             songs: songList,
             singer,
             hasMore

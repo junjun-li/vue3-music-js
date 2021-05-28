@@ -35,7 +35,7 @@ export default defineComponent({
     const _getSingerList = async () => {
       const res = await getSingerList()
       if (res.code === 0) {
-        singerList.value = res.data.singers
+        singerList.value = res.result.singers
       }
     }
     const loading = computed(() => {

@@ -42,6 +42,7 @@
     "pinyin": "^2.9.1",
     "sass": "^1.32.8",
     "sass-loader": "^10.1.1",
+    "svg-sprite-loader": "^6.0.7",
     "xsrf": "^1.0.0"
   }
 }
