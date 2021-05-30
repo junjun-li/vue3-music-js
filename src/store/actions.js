@@ -22,7 +22,7 @@ export default {
     // 4. 设置播放的index
     // 5. 设置全屏播放
     // 6. 设置真实的播放列表(因为可能是随机播放)
-    commit(SET_PLAY_MODE, PLAY_MODE.sqeuence)
+    commit(SET_PLAY_MODE, PLAY_MODE.sequence)
     commit(SET_SEQUENCE_LIST, list)
     commit(SET_PLAYING, true)
     commit(SET_CURRENT_PLAY_INDEX, index)

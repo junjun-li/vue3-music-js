@@ -3,7 +3,7 @@
     <div class="icon-wrapper">
       <SvgIcon
         class-name="icon"
-        icon-class="sqeuence" />
+        icon-class="sequence" />
     </div>
     <div
       :class="songReady ? '' : 'disabled'"
