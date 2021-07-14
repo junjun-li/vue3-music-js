@@ -1,3 +1,4 @@
+import { __favoritesList__ } from '@/utils/constant'
 import {
   SET_PLAYING,
   SET_SEQUENCE_LIST,
@@ -5,9 +6,9 @@ import {
   SET_PLAY_MODE,
   SET_CURRENT_PLAY_INDEX,
   SET_FULL_SCREEN,
-  SET_FAVORITE_LIST
+  SET_FAVORITES_LIST
 } from './mutations_types'
-
+import storage from 'store'
 const mutations = {
   [SET_PLAYING] (state, playing) {
     state.playing = playing
@@ -27,8 +28,9 @@ const mutations = {
   [SET_FULL_SCREEN] (state, fullScreen) {
     state.fullScreen = fullScreen
   },
-  [SET_FAVORITE_LIST] (state, list) {
-    state.favoriteList = list
+  [SET_FAVORITES_LIST] (state, list) {
+    storage.set(__favoritesList__, list)
+    state.favoritesList = list
   }
 }
 

@@ -23,6 +23,5 @@ module.exports = {
     'quotes': 'off',
     // if else在新行
     'brace-style': 'off'
-
   }
 }

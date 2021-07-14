@@ -19,6 +19,7 @@
 
 <script>
 import { getSingerList } from '@/api'
+import { __singerDetailInfo__ } from '@/utils/constant'
 import { computed, defineComponent, onMounted, ref } from 'vue'
 import IndexList from '@/components/IndexList/IndexList'
 import { useRouter } from 'vue-router'
@@ -42,7 +43,7 @@ export default defineComponent({
       return !singerList.value.length
     })
     const goToSingerDetail = (item) => {
-      store.set(`singerDetailInfo`, item)
+      store.set(__singerDetailInfo__, item)
       singer.value = item
       router.push({
         path: `/singer/${item.mid}`

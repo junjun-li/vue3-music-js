@@ -1,5 +1,6 @@
-import { PLAY_MODE } from '@/utils/constant'
-
+import { __favoritesList__, PLAY_MODE } from '@/utils/constant'
+import storage from 'store'
+window.storage = storage
 const state = {
   // 歌曲列表
   sequenceList: [],
@@ -12,6 +13,7 @@ const state = {
   // 当前的播放索引
   currentPlayIndex: 0,
   // 播放器是否全局展开
-  fullScreen: false
+  fullScreen: false,
+  favoritesList: storage.get(__favoritesList__) || []
 }
 export default state

@@ -6,9 +6,9 @@ import {
   SET_PLAYLIST,
   SET_PLAY_MODE,
   SET_CURRENT_PLAY_INDEX,
-  SET_FULL_SCREEN,
-  SET_FAVORITE_LIST
+  SET_FULL_SCREEN
 } from './mutations_types'
+
 export default {
   /**
    * @param commit
@@ -36,5 +36,19 @@ export default {
     commit(SET_CURRENT_PLAY_INDEX, 0)
     commit(SET_FULL_SCREEN, true)
     commit(SET_PLAYLIST, shuffle(list))
+  },
+  changeMode ({ commit, state, getters }, mode) {
+    const id = getters.currentPlaySong.id
+    // 顺序播放
+    if (mode === PLAY_MODE.sequence) {
+      commit(SET_PLAYLIST, state.sequenceList)
+    }
+    // 随机播放
+    else if (mode === PLAY_MODE.random) {
+      commit(SET_PLAYLIST, shuffle(state.sequenceList))
+    }
+    const index = state.playlist.findIndex(item => item.id === id)
+    commit(SET_CURRENT_PLAY_INDEX, index)
+    commit(SET_PLAY_MODE, mode)
   }
 }

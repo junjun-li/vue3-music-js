@@ -61,6 +61,7 @@
 
 <script>
 import { getSingerDetail, processSongs } from '@/api'
+import { __singerDetailInfo__ } from '@/utils/constant'
 import { onMounted, ref, defineComponent, computed, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import MusicList from '@/components/MusicList/MusicList'
@@ -180,9 +181,9 @@ export default defineComponent({
       }
       else {
         // 去本地缓存找, 并且路由id === 缓存的id
-        const singerDetailInfo = _store.get(`singerDetailInfo`)
+        const singerDetailInfo = _store.get(__singerDetailInfo__)
         if (singerDetailInfo.mid === route.params.id) {
-          singerInfo.value = _store.get(`singerDetailInfo`)
+          singerInfo.value = singerDetailInfo
         }
         else {
           router.push(`/singer`)

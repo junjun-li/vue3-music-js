@@ -1,9 +1,20 @@
 <template>
   <div class="operators">
-    <div class="icon-wrapper">
+    <div
+      class="icon-wrapper"
+      @click="handleChangeMode">
       <SvgIcon
+        v-show="playMode === PLAY_MODE.sequence"
         class-name="icon"
         icon-class="sequence" />
+      <SvgIcon
+        v-show="playMode === PLAY_MODE.loop"
+        class-name="icon"
+        icon-class="loop" />
+      <SvgIcon
+        v-show="playMode === PLAY_MODE.random"
+        class-name="icon"
+        icon-class="random" />
     </div>
     <div
       :class="songReady ? '' : 'disabled'"
@@ -11,7 +22,8 @@
       @click="toggleSong('previous')">
       <SvgIcon
         class-name="icon"
-        icon-class="previous" />
+        icon-class="previous"
+      />
     </div>
     <div
       :class="songReady ? '' : 'disabled'"
@@ -36,21 +48,28 @@
     </div>
     <div class="icon-wrapper">
       <SvgIcon
+        v-show="isFavorites"
         class-name="icon"
-        icon-class="favorites" />
+        icon-class="favorites"
+        @click="addFavorite" />
+      <SvgIcon
+        v-show="!isFavorites"
+        class-name="icon"
+        icon-class="favorites_fill"
+        @click="removeFavorite" />
     </div>
   </div>
 </template>
 
 <script>
-import SvgIcon from '@/components/SvgIcon/SvgIcon'
-import { SET_CURRENT_PLAY_INDEX, SET_PLAYING } from '@/store/mutations_types'
+
+import { SET_CURRENT_PLAY_INDEX, SET_FAVORITES_LIST, SET_PLAYING } from '@/store/mutations_types'
 import { computed, defineComponent } from 'vue'
 import { useStore } from 'vuex'
+import { PLAY_MODE } from '@/utils/constant'
 
 export default defineComponent({
   name: 'Operators',
-  components: { SvgIcon },
   props: {
     audioRef: {
       type: Object,
@@ -66,7 +85,12 @@ export default defineComponent({
     const playing = computed(() => store.state.playing)
     const playlist = computed(() => store.state.playlist)
     const currentPlayIndex = computed(() => store.state.currentPlayIndex)
-
+    const playMode = computed(() => store.state.playMode)
+    const favoritesList = computed(() => store.state.favoritesList)
+    const id = computed(() => store.getters.currentPlaySong && store.getters.currentPlaySong.id)
+    const isFavorites = computed(() => {
+      return favoritesList.value && favoritesList.value.findIndex(item => item.id === id.value) === -1
+    })
     // 暂停, 播放歌曲
     const togglePlay = () => {
       const audioEl = props.audioRef
@@ -107,18 +131,42 @@ export default defineComponent({
       store.commit(SET_CURRENT_PLAY_INDEX, index)
       store.commit(SET_PLAYING, true)
     }
+    // 单曲循环
     const loop = () => {
       // 如果只有一首歌, 从新播放
       const audioEl = props.audioRef
       audioEl.currentTime = 0
       audioEl.play()
     }
+    // 切换播放模式
+    const handleChangeMode = () => {
+      const mode = (playMode.value + 1) % 3
+      store.dispatch('changeMode', mode)
+    }
+    const addFavorite = () => {
+      const currentPlaySong = store.getters.currentPlaySong
+      store.commit(SET_FAVORITES_LIST, [...favoritesList.value, currentPlaySong])
+    }
+    const removeFavorite = () => {
+      const _favoritesList = [...favoritesList.value]
+      const index = _favoritesList.findIndex(item => item.id === id.value)
+      _favoritesList.splice(index, 1)
+      store.commit(SET_FAVORITES_LIST, _favoritesList)
+    }
     return {
+      id,
       playing,
       playlist,
       currentPlayIndex,
+      playMode,
+      PLAY_MODE,
+      isFavorites,
+      favoritesList,
+      addFavorite,
+      removeFavorite,
       togglePlay,
-      toggleSong
+      toggleSong,
+      handleChangeMode
     }
   }
 })
